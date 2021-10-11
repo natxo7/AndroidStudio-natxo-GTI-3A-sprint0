@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private LocationManager locManager;
     public Location loc;
     private Intent elIntentDelServicio = null;
-    double longitud;
-    double latitud;
+    private double longitud;
+     private double latitud;
     // --------------------------------------------------------------
     // --------------------------------------------------------------
     private static final String ETIQUETA_LOG = ">>>>";
@@ -352,8 +352,8 @@ public class MainActivity extends AppCompatActivity {
             }
             loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (loc == null) {
-                latitud=38.59;
-                        longitud=0.09;
+                latitud=38;
+                        longitud=2;
 
             } else {
                 latitud = loc.getLatitude();
@@ -376,9 +376,9 @@ public class MainActivity extends AppCompatActivity {
         txtMediciones = findViewById(R.id.txtMediciones);
 
         Log.d(ETIQUETA_LOG, " onCreate(): empieza ");
-        obtenerCoordenadas();
-        inicializarBlueTooth();
 
+        inicializarBlueTooth();
+            obtenerCoordenadas();
         Log.d(ETIQUETA_LOG, " onCreate(): termina ");
 
     } // onCreate()
