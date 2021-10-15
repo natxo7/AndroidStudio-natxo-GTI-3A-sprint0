@@ -1,6 +1,9 @@
 package com.example.natgarse_upv.android.LogicaFake;
 
 // ------------------------------------------------------------------
+//NATXO GARCIA SERQUERA
+//3 GTI
+//PROYECTO SPRINT 0
 // ------------------------------------------------------------------
 
 import android.Manifest;
@@ -38,29 +41,28 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     EditText txtMediciones;
-    Button btnInsertar;
     logica lalogica=new logica();
     private LocationManager locManager;
     public Location loc;
     private Intent elIntentDelServicio = null;
+    //--------------------------------------------------
     private double longitud;
      private double latitud;
     // --------------------------------------------------------------
     // --------------------------------------------------------------
     private static final String ETIQUETA_LOG = ">>>>";
-
     private static final int CODIGO_PETICION_PERMISOS = 11223344;
-
     // --------------------------------------------------------------
     // --------------------------------------------------------------
     private BluetoothLeScanner elEscanner;
-
     private ScanCallback callbackDelEscaneo = null;
-
     // --------------------------------------------------------------
     // --------------------------------------------------------------
+    /*
+    * METODO PARA BUSCAR DISPOSITIVOS*/
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void buscarTodosLosDispositivosBTLE() {
+        //Log para empezar a buscar dispositivos
         Log.d(ETIQUETA_LOG, " buscarTodosLosDispositivosBTL(): empieza ");
 
         Log.d(ETIQUETA_LOG, " buscarTodosLosDispositivosBTL(): instalamos scan callback ");
@@ -96,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
     } // ()
 
     // --------------------------------------------------------------
+    //INFORMACION DEL DISPOSTIVO QUE HEMOS DETECTADO
     // --------------------------------------------------------------
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void mostrarInformacionDispositivoBTLE(ScanResult resultado ) {
@@ -215,9 +218,7 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void botonBuscarNuestroDispositivoBTLEPulsado(View v ) {
         Log.d(ETIQUETA_LOG, " boton nuestro dispositivo BTLE Pulsado" );
-        //this.buscarEsteDispositivoBTLE( Utilidades.stringToUUID( "EPSG-GTI-PROY-3A" ) );
-
-        //this.buscarEsteDispositivoBTLE( "EPSG-GTI-PROY-3A" );
+        //NOMBRE DEL DISPOSITIVO QUE QUEREMOS BUSCAR
         this.buscarEsteDispositivoBTLE( "AusiasBM-GTI" );
 
     } // ()
@@ -232,18 +233,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-    //--------------------------------------------------------------------------
-    //--------------------------------------------------------------------------
-    /*
-     * Método para subir datos fake para así comprobar que funciona correctamente la subida de datos a la base de datos
-     *
-     * {String} URL - Le pasamos la URL de la base de datos
-     *
-     * No devuelve nada
-     */
-    //--------------------------------------------------------------------------
-    //--------------------------------------------------------------------------
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void inicializarBlueTooth() {
@@ -289,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     // --------------------------------------------------------------
+    //METODO PARA ARRANCAR EL SERVICIO
     // --------------------------------------------------------------
     public void botonArrancarServicioPulsado(View v) {
         Log.d(ETIQUETA_LOG, " boton arrancar servicio Pulsado");
@@ -306,63 +296,53 @@ public class MainActivity extends AppCompatActivity {
         startService(this.elIntentDelServicio);
 
     } // ()
+    /*
+    * METODO PARA DETENER EL SERVICIO*/
 
-    // --------------------------------------------------------------
-    /**
-     * Método para detener el servicio
-     *
-     * @param v: View
-     *
-     * @return No devuelve nada
-     */
-    // --------------------------------------------------------------
     public void botonDetenerServicioPulsado(View v) {
 
         if (this.elIntentDelServicio == null) {
-            // no estaba arrancado
+            //SI EL SERVICIO NO ESTA ARRANCADO
             return;
         }
-
+        //DETENEMOS EL SERVICIO
         stopService(this.elIntentDelServicio);
 
         this.elIntentDelServicio = null;
-
+        //log para ver que a funcionado
         Log.d(ETIQUETA_LOG, " boton detener servicio Pulsado");
 
 
     } // ()
-
+    /*
+    * METODO PARA OBTENER LAS CORDENADAS
+    * PARA ESTE SPRINT FIJAMOS UNA CORDENADAS EN 38 2
+    * */
 
     public void obtenerCoordenadas() {
 
         locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-
-
         if (locManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
             loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (loc == null) {
+                //FIJAMOS LAS CORDENADAS
                 latitud=38;
-                        longitud=2;
+                longitud=2;
 
             } else {
+                //OBTENER CORDENADAS
                 latitud = loc.getLatitude();
-              //  txtLatitud.setText(String.valueOf(latitud));//txtLongitud.setText(String.valueOf(longitud));
                 longitud = loc.getLongitude();
 
             }
         }
     }
+    /*
+    METODO PARA GUARDAR LA MEDICION QUE SE INTRODUCE
+    * */
     public void botonGuardarMedicion(View view){
         Medicion medicion=new Medicion(Integer.parseInt(txtMediciones.getText().toString()),latitud,longitud);
         lalogica.boto(medicion);

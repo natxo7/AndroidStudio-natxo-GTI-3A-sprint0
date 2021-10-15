@@ -66,12 +66,15 @@ public class PeticionarioREST extends AsyncTask<Void, Void, Boolean> {
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty( "Content-Type", "application/json; charset-utf-8" );
+            //connection.setRequest sirve para que no haya error en el formato JSON en php
             connection.setRequestMethod(this.elMetodo);
-            // connection.setRequestProperty("Accept", "*/*);
+
 
             // connection.setUseCaches(false);
             connection.setDoInput(true);
-
+            /*
+            * Si el distinto de GET Y el cuerpo distinto de null
+            * */
             if ( ! this.elMetodo.equals("GET") && this.elCuerpo != null ) {
                 Log.d("clienterestandroid", "doInBackground(): no es get, pongo cuerpo");
                 connection.setDoOutput(true);
@@ -82,14 +85,20 @@ public class PeticionarioREST extends AsyncTask<Void, Void, Boolean> {
                 dos.close();
             }
 
-            // ya he enviado la peticin
+            /*
+            * Logo de peticion enviada*/
             Log.d("clienterestandroid", "doInBackground(): peticin enviada ");
 
-            // ahora obtengo la respuesta
+            /*
+            * Para la respuesta*/
 
             int rc = connection.getResponseCode();
             String rm = connection.getResponseMessage();
             String respuesta = "" + rc + " : " + rm;
+            /**
+             * Log para mostrar la respuesta
+             */
+
             Log.d("clienterestandroid", "doInBackground() recibo respuesta = " + respuesta);
             this.codigoRespuesta = rc;
 
@@ -113,13 +122,14 @@ public class PeticionarioREST extends AsyncTask<Void, Void, Boolean> {
                 connection.disconnect();
 
             } catch (IOException ex) {
-                // dispara excepcin cuando la respuesta REST no tiene cuerpo y yo intento getInputStream()
+              //Log para saber que no hay cuerpo en la respuesta
                 Log.d("clienterestandroid", "doInBackground() : parece que no hay cuerpo en la respuesta");
             }
 
-            return true; // doInBackground() termina bien
+            return true; //termina
 
         } catch (Exception ex) {
+            //log de error
             Log.d("clienterestandroid", "doInBackground(): ocurrio alguna otra excepcion: " + ex.getMessage());
         }
 
@@ -129,7 +139,7 @@ public class PeticionarioREST extends AsyncTask<Void, Void, Boolean> {
     // --------------------------------------------------------------------
     // --------------------------------------------------------------------
     protected void onPostExecute(Boolean comoFue) {
-        // llamado tras doInBackground()
+
         Log.d("clienterestandroid", "onPostExecute() comoFue = " + comoFue);
         this.laRespuesta.callback(this.codigoRespuesta, this.cuerpoRespuesta);
     }
